@@ -4,6 +4,7 @@
 
 # Python standard library imports
 import functools
+import time
 
 
 def _wait_before_retry(func, sleep):
@@ -29,6 +30,8 @@ def retry(_func=None, max_tries=5, sleep=0):
                         break
                 except Exception as e:
                     pass
+
+                _wait_before_retry(func, sleep)
 
         return wrapper
 

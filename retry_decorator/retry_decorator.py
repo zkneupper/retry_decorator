@@ -29,8 +29,10 @@ def retry(_func=None, max_tries=5, sleep=0):
     def decorator_retry(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
+
             ret = None
             for try_i in range(1, max_tries + 1):
+
                 try:
                     ret = func(*args, **kwargs)
                     if ret is not None:
@@ -40,6 +42,7 @@ def retry(_func=None, max_tries=5, sleep=0):
                         # Escape the loop if `func` runs without an error,
                         # but returns no value.
                         break
+
                 except Exception as e:
                     _decorator_retry_warning(func, try_i)
 

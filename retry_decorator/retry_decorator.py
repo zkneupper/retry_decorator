@@ -5,6 +5,7 @@
 # Python standard library imports
 import functools
 import time
+import traceback
 import warnings
 
 
@@ -18,6 +19,7 @@ def _decorator_retry_warning(func, try_i):
     warning_msg = [
         f"ERROR WARNING: function call `{func.__name__}` failed on try #{try_i}",
         "Traceback:",
+        traceback.format_exc(),
     ]
     warning_msg = "\n" + "\n".join(warning_msg)
     warnings.warn(warning_msg)

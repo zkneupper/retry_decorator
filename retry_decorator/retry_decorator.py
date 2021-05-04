@@ -26,6 +26,8 @@ def _decorator_retry_warning(func, try_i):
 
 
 def retry(_func=None, max_tries=5, sleep=0):
+    """A decorator to retry the function if it fails."""
+
     def decorator_retry(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
@@ -44,6 +46,7 @@ def retry(_func=None, max_tries=5, sleep=0):
                         break
 
                 except Exception as e:
+                    # Show warning when `func` raises an error
                     _decorator_retry_warning(func, try_i)
 
                 _wait_before_retry(func, sleep)

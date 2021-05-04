@@ -10,8 +10,15 @@ def retry(_func=None, max_tries=5, sleep=0):
     def decorator_retry(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-
-            pass
+            ret = None
+            try:
+                ret = func(*args, **kwargs)
+                if ret is not None:
+                    return ret
+                else:
+                    break
+            except Exception as e:
+                pass
 
         return wrapper
 

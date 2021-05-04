@@ -6,6 +6,12 @@
 import functools
 
 
+def _wait_before_retry(func, sleep):
+    if sleep:
+        print(f"Retrying `{func.__name__}` in {sleep} seconds ...")
+        time.sleep(sleep)
+
+
 def retry(_func=None, max_tries=5, sleep=0):
     def decorator_retry(func):
         @functools.wraps(func)

@@ -5,7 +5,7 @@
 import retry_decorator
 
 
-@retry_decorator.retry(max_tries=2, sleep=1)
+@retry_decorator.retry(max_tries=3, sleep=1)
 def hw(name="World"):
     print(f"Hello {name}")
     raise ValueError

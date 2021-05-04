@@ -15,8 +15,11 @@ def retry(_func=None, max_tries=5, sleep=0):
                 try:
                     ret = func(*args, **kwargs)
                     if ret is not None:
+                        # Escape the loop if `func` returns a value.
                         return ret
                     else:
+                        # Escape the loop if `func` runs without an error,
+                        # but returns no value.
                         break
                 except Exception as e:
                     pass

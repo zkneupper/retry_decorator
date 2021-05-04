@@ -25,7 +25,7 @@ def _decorator_retry_warning(func, try_i):
     warnings.warn(warning_msg)
 
 
-def retry(_func=None, max_tries=5, sleep=0):
+def retry(_func=None, max_tries=5, sleep=0, suppress_warnings=False):
     """A decorator to retry the function if it fails."""
 
     def decorator_retry(func):
@@ -47,7 +47,8 @@ def retry(_func=None, max_tries=5, sleep=0):
 
                 except Exception as e:
                     # Show warning when `func` raises an error
-                    _decorator_retry_warning(func, try_i)
+                    if not suppress_warnings:
+                        _decorator_retry_warning(func, try_i)
 
                 _wait_before_retry(func, sleep)
 

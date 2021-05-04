@@ -5,12 +5,22 @@
 # Python standard library imports
 import functools
 import time
+import warnings
 
 
 def _wait_before_retry(func, sleep):
     if sleep:
         print(f"Retrying `{func.__name__}` in {sleep} seconds ...")
         time.sleep(sleep)
+
+
+def _decorator_retry_warning(func, try_i):
+    warning_msg = [
+        f"ERROR WARNING: function call `{func.__name__}` failed on try #{try_i}",
+        "Traceback:",
+    ]
+    warning_msg = "\n" + "\n".join(warning_msg)
+    warnings.warn(warning_msg)
 
 
 def retry(_func=None, max_tries=5, sleep=0):
@@ -29,7 +39,7 @@ def retry(_func=None, max_tries=5, sleep=0):
                         # but returns no value.
                         break
                 except Exception as e:
-                    pass
+                    _decorator_retry_warning(func, try_i)
 
                 _wait_before_retry(func, sleep)
 

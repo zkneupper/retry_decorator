@@ -15,6 +15,11 @@ def _wait_before_retry(func, sleep):
         time.sleep(sleep)
 
 
+def _infinite_loop_warning(max_tries):
+    if max_tries is None:
+        warnings.warn("INFINITE LOOP possible because max_tries is None!")
+
+
 def _decorator_retry_warning(func, try_i):
     warning_msg = [
         f"ERROR WARNING: function call `{func.__name__}` failed on try #{try_i}",
@@ -44,7 +49,12 @@ def retry(_func=None, max_tries=5, sleep=0, suppress_warnings=False):
         def wrapper(*args, **kwargs):
 
             ret = None
-            for try_i in range(1, max_tries + 1):
+
+            _infinite_loop_warning(max_tries)
+
+            try_i = 1
+
+            while True:
 
                 try:
                     ret = func(*args, **kwargs)
@@ -60,6 +70,12 @@ def retry(_func=None, max_tries=5, sleep=0, suppress_warnings=False):
                     # Show warning when `func` raises an error
                     if not suppress_warnings:
                         _decorator_retry_warning(func, try_i)
+
+                if max_tries is not None:
+                    if try_i >= (max_tries):
+                        break
+
+                try_i += 1
 
                 _wait_before_retry(func, sleep)
 

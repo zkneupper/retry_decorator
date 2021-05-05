@@ -30,7 +30,13 @@ def _decorator_retry_warning(func, try_i):
     warnings.warn(warning_msg)
 
 
-def retry(_func=None, max_tries=5, sleep=0, suppress_warnings=False):
+def retry(
+    _func=None,
+    max_tries=5,
+    sleep=0,
+    raise_final_try_error=True,
+    suppress_warnings=False,
+):
     """A decorator to retry the function if it fails.
 
     max_tries: An integer for the number of tries, or None.
@@ -71,9 +77,12 @@ def retry(_func=None, max_tries=5, sleep=0, suppress_warnings=False):
                     if not suppress_warnings:
                         _decorator_retry_warning(func, try_i)
 
-                if max_tries is not None:
-                    if try_i >= (max_tries):
-                        break
+                    if max_tries is not None:
+                        if try_i >= (max_tries):
+                            if raise_final_try_error:
+                                raise e
+                            else:
+                                break
 
                 try_i += 1
 

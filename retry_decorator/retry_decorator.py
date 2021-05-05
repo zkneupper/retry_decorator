@@ -26,7 +26,18 @@ def _decorator_retry_warning(func, try_i):
 
 
 def retry(_func=None, max_tries=5, sleep=0, suppress_warnings=False):
-    """A decorator to retry the function if it fails."""
+    """A decorator to retry the function if it fails.
+
+    max_tries: An integer for the number of tries, or None.
+        max_tries=None could cause an infinite loop
+
+    sleep: A float or integer for the number of seconds to
+        wait between tries.
+
+    suppress_warnings: A boolean for whether or not to suppress
+        warnings raised when the decorated function fails in a try
+
+    """
 
     def decorator_retry(func):
         @functools.wraps(func)
